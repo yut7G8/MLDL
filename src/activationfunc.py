@@ -32,3 +32,14 @@ class Activation():
     def relu(self, x):
         return np.matrix(0, x)
         
+    def identity_func(self, x):
+        return x
+
+    def softmax(self, a):
+        c = np.max(a)
+        exp_a = np.exp(a - c)
+        sum_exp_a = np.sum(exp_a)
+        y = exp_a / sum_exp_a
+
+        return y
+    
