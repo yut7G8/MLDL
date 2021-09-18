@@ -1,6 +1,6 @@
 import numpy as np
 
-class Loss():
+class Loss:
     def __init__(self) -> None:
         pass
     
@@ -11,5 +11,11 @@ class Loss():
         delta = 1e-7
         return -np.sum(t * np.log(y + delta))
     
-    
+    def cross_entropy_error_minibatch(self, y, t):
+        if y.ndim == 1:
+            t = t.reshape(1, t.size)
+            y = y.reshape(1, y.size)
 
+        batch_size = y.shape[0]
+        
+        return -np.sum(t + np.log(y + 1e-7)) / batch_size

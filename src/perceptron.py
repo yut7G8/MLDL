@@ -1,6 +1,6 @@
 import numpy as np
 
-class Gate():
+class Gate:
 
     def __init__(self) -> None:
         self.w1, self.w2, self.theta = 0.5, 0.5, 0.7

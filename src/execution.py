@@ -1,4 +1,6 @@
 import sys, os
+
+from numpy.lib import twodim_base
 sys.path.append(os.pardir)
 from dataset.mnist import load_mnist
 from PIL import Image
@@ -15,7 +17,7 @@ class Execution():
         (x_train, t_train), (x_test, t_test) = \
             load_mnist(flatten=True, normalize=False)
 
-        return x_test, t_test
+        return x_train, t_train, x_test, t_test
     
     def init_network():
         with open("data/sample_weight.pkl", 'rb') as f:
@@ -54,16 +56,28 @@ class Execution():
         print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
     
     def numrecog_batch(self):
-        x, t = self.get_data()
+        x_train, t_train, x_test, t_tset = self.get_data()
         network = self.init_network()
 
         batch_size = 100
         accuracy_cnt = 0
 
-        for i in range(0, len(x), batch_size):
-            x_batch = x[i:i+batch_size]
+        for i in range(0, len(x_test), batch_size):
+            x_batch = x_test[i:i+batch_size]
             y_batch = self.predict(network, x_batch)
             p = np.argmax(y_batch, axis=1)
-            accuracy_cnt += np.sum(p == t[i:i+batch_size])
+            accuracy_cnt += np.sum(p == t_tset[i:i+batch_size])
         
-        print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
+        print("Accuracy:" + str(float(accuracy_cnt) / len(x_test)))
+    
+    def numrecog_minibatch(self):
+        x_train, t_train, x_test, t_tset = self.get_data()
+        network = self.init_network()
+
+        train_size = x_train.shape[0]
+        batch_size = 10
+        batch_mask = np.random.choice(train_size, batch_size)
+        x_batch = x_train[batch_mask]
+        t_batch = t_train[batch_mask]
+
+        

@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pylab as plt
 
-class Activation():
+class Activation:
 
     def __init__(self) -> None:
         pass
