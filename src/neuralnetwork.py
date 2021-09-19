@@ -4,6 +4,9 @@ import numpy as np
 from activationfunc import Activation
 from lossfunc import Loss
 from differential import Differential
+from collections import OrderedDict
+from layers import Affine
+from layers import SoftmaxWithLoss
 
 class Neuralnet:
 
@@ -55,16 +58,29 @@ class TwoLayerNet:
                             np.random.randn(hidden_size, output_size)
         self.params['b2'] = np.zeros(output_size)
 
+        # レイヤの生成
+        self.layers = OrderedDict()
+        self.layers['Affine1'] = \
+            Affine(self.params['W1'], self.params['b1'])
+        self.layers['Relu1'] = Activation.relu()
+        self.layers['Affine2'] = \
+            Affine(self.params['W2'], self.params['b2'])
+        
+        self.lastLayer = SoftmaxWithLoss()
+
     def predict(self, x):
-        W1, W2 = self.params['W1'], self.params['W2']
-        b1, b2 = self.params['b1'], self.params['b2']
+        # W1, W2 = self.params['W1'], self.params['W2']
+        # b1, b2 = self.params['b1'], self.params['b2']
 
-        a1 = np.dot(x, W1) + b1
-        z1 = Activation().sigmoid(a1)
-        a2 = np.dot(z1, W2) + b2
-        y = Activation().softmax(a2)
+        # a1 = np.dot(x, W1) + b1
+        # z1 = Activation().sigmoid(a1)
+        # a2 = np.dot(z1, W2) + b2
+        # y = Activation().softmax(a2)
 
-        return y
+        for layer in self.layers.values():
+            x = layer.forward(x)
+
+        return x
 
     # x:入力データ, t:教師データ
     def loss(self, x, t):
@@ -94,3 +110,23 @@ class TwoLayerNet:
 
         return grads
     
+    def gradient(self, x, t):
+        # forward
+        self.loss(x, t)
+
+        # backward
+        dout = 1
+        dout = self.lastLayer.backward(dout)
+
+        layers = list(self.layers.values())
+        layers.reverse()
+        for layer in layers:
+            dout = layer.backward(dout)
+        
+        grads = {}
+        grads['W1'] = self.layers['Affine1'].dW
+        grads['b1'] = self.layers['Affine1'].db
+        grads['W2'] = self.layers['Affine2'].dW
+        grads['b2'] = self.layers['Affine2'].db
+
+        return grads
