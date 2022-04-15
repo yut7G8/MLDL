@@ -1,6 +1,10 @@
 # Easy CNN
 
-# フォルダの構成
+## Network Structure
+
+![CNN](https://user-images.githubusercontent.com/61765504/163571487-701177e2-bccc-487c-b4e3-34a70f5cc1fa.png)
+
+## フォルダの構成
 
 ```
 src_ml_ict_cnn/
@@ -17,7 +21,7 @@ src_ml_ict_cnn/
 
 ```
 
-# 実行
+## 実行
 
 ```
 $ python main.py
