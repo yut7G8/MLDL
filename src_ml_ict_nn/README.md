@@ -1,6 +1,10 @@
 # Easy DNN
 
-# フォルダの構成
+## Network Structure
+
+![DNN](https://user-images.githubusercontent.com/61765504/163571200-0da0d338-45a5-4124-a5c4-2d3c5cc0d414.png)
+
+## フォルダの構成
 
 ```
 src_ml_ict_cnn/
@@ -13,7 +17,7 @@ src_ml_ict_cnn/
 
 ```
 
-# 実行
+## 実行
 
 ```
 $ python main.py
